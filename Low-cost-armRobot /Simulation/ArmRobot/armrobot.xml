@@ -1,0 +1,112 @@
+<mujoco model="low_cost_robot_scene">
+  <compiler angle="radian" meshdir="assets" texturedir="assets" autolimits="true"/>
+  <option cone="elliptic" impratio="10" timestep="0.001"/>
+
+  <statistic center="0 0 0.9" extent="1.5"/>
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+    <global azimuth="140" elevation="-30"/>
+  </visual>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+    <texture type="2d" name="wood" builtin="flat" rgb1="0.6 0.4 0.2" rgb2="0.4 0.3 0.1" width="300" height="300"/>
+    <material name="wood" texture="wood" reflectance="0.1" shininess="0.3" specular="0.2"/>
+    <mesh file="base_link.stl" scale="0.001 0.001 0.001"/>
+    <mesh file="first-bracket-motor_1.stl" scale="0.001 0.001 0.001"/>
+    <mesh file="shoulder-to-elbow-motor_v1_1.stl" scale="0.001 0.001 0.001"/>
+    <mesh file="elbow-to-wrist-extension.stl" scale="0.001 0.001 0.001"/>
+    <mesh file="elbow-to-wrist-motor-reference_v1_1.stl" scale="0.001 0.001 0.001"/>
+    <mesh file="gripper-static-motor_v2_1.stl" scale="0.001 0.001 0.001"/>
+    <mesh file="gripper-moving-part-dumb_v2_1.stl" scale="0.001 0.001 0.001"/>
+  </asset>
+
+  <default>
+    <default class="low_cost_robot">
+      <general biastype="affine"/>
+      <joint axis="0 1 0"/>
+      <default class="Base_rotate">
+        <joint axis="0 0 1" pos="0.00025 0.06875 0.0409" range="-3.14158 3.14158" damping="0.5"/>
+        <position ctrlrange="-3.14158 3.14158" kp="50"/>
+      </default>
+      <default class="Shoulder">
+        <joint axis="1 0 0" pos="0.01945 0.06895 0.05515" range="-1.47958 0.650" damping="0.5"/>
+        <position ctrlrange="-1.47958 0.650" kp="50"/>
+      </default>
+      <default class="Shoulder_extension">
+        <joint axis="1 0 0" pos="-0.0143 0.08375 0.16345" range="-1.39158 1.66158" damping="0.5"/>
+        <position ctrlrange="-1.39158 1.66158" kp="50"/>
+      </default>
+      <default class="Elbow">
+        <joint axis="1 0 0" pos="-0.0133 0.1743 0.166" range="-1.554158 1.77158" damping="0.5"/>
+        <position ctrlrange="-1.554158 1.77158" kp="50"/>
+      </default>
+      <default class="Rotate_Gripper">
+        <joint axis="0 -1 0" pos="-0.0003 0.2153 0.166" range="-3.14158 3.14158" damping="0.5"/>
+        <position ctrlrange="-3.14158 3.14158" kp="50"/>
+      </default>
+      <default class="Open_gripper">
+        <joint axis="0 0 -1" pos="-0.0079 0.2315 0.171" range="-1.55 0.035" damping="0.5"/>
+        <position ctrlrange="-1.55 0.035" kp="50"/>
+      </default>
+    </default>
+  </default>
+
+  <worldbody>
+    <light pos="0 0 2.5" dir="0 0 -1" directional="true"/>
+    <body name="table">
+      <geom name="table_surface" type="box" pos="0 0 0.775" size="1.0 1.0 0.05" material="wood" friction="0.3"/>
+      <geom name="leg1" type="cylinder" pos="0.95 0.95 0.4" size="0.05 0.4" rgba="0.4 0.3 0.1 1"/>
+      <geom name="leg2" type="cylinder" pos="0.95 -0.95 0.4" size="0.05 0.4" rgba="0.4 0.3 0.1 1"/>
+      <geom name="leg3" type="cylinder" pos="-0.95 0.95 0.4" size="0.05 0.4" rgba="0.4 0.3 0.1 1"/>
+      <geom name="leg4" type="cylinder" pos="-0.95 -0.95 0.4" size="0.05 0.4" rgba="0.4 0.3 0.1 1"/>
+      <body name="base_link" pos="0 0 0.825">
+        <inertial pos="0 0 0" mass="1" diaginertia="0.01 0.01 0.01"/>
+        <geom type="mesh" name="base_link" mesh="base_link" rgba="1 1 1 1"/>
+        <body name="Base_rotate">
+          <joint name="Base_rotate" class="Base_rotate"/>
+          <geom type="mesh" name="Base_rotate" mesh="first-bracket-motor_1" rgba="0 0 0 1"/>
+          <body name="Shoulder">
+            <joint name="Shoulder" class="Shoulder"/>
+            <geom type="mesh" name="Shoulder" mesh="shoulder-to-elbow-motor_v1_1" rgba="1 1 1 1"/>
+            <body name="Shoulder_extension">
+              <joint name="Shoulder_extension" class="Shoulder_extension"/>
+              <geom type="mesh" name="Shoulder_extension" pos="-0.005 -0.048 0.1019" mesh="elbow-to-wrist-extension" rgba="0 0 0 1"/>
+              <body name="Elbow">
+                <joint name="Elbow" class="Elbow"/>
+                <geom type="mesh" name="Elbow" pos="-0.0003 0.090 0.001" mesh="elbow-to-wrist-motor-reference_v1_1" rgba="1 1 1 1"/>
+                <body name="Rotate_Gripper">
+                  <joint name="Rotate_Gripper" class="Rotate_Gripper"/>
+                  <geom type="mesh" name="Rotate_Gripper-pt1" pos="-0.0002 0.090 0.001" mesh="gripper-static-motor_v2_1" rgba="1 1 1 1"/>
+                  <camera name="robot_eye" pos="0 0.34 0.25" euler="-0.6 0 3.14" fovy="60" resolution="512 512"/>
+                  <body name="Open_gripper">
+                    <joint name="Open_gripper" class="Open_gripper"/>
+                    <geom type="mesh" name="Open_gripper" pos="-0.0002 0.090 0.001" mesh="gripper-moving-part-dumb_v2_1" rgba="1 1 1 1"/>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+    <body name="box" pos="0.0 0.3 0.84">
+      <freejoint name="red_box_joint"/>
+      <inertial pos="0 0 0" mass="0.1" diaginertia="0.00016667 0.00016667 0.00016667"/>
+      <geom friction="0.5" condim="3" pos="0 0 0" size="0.015 0.015 0.015" type="box" name="red_box" rgba="0.5 1 1 1" priority="1"/>
+    </body>
+    <camera name="top_view" pos="0 0.2 1.8" euler="0 0 0" fovy="60" resolution="512 512"/>
+    <camera name="top_right_view" pos="0.5 0.5 1.5" euler="-1.0 0.7 -0.4" fovy="55" resolution="512 512"/>
+  </worldbody>
+
+  <actuator>
+    <position class="Base_rotate" name="Base_rotate" joint="Base_rotate"/>
+    <position class="Shoulder" name="Shoulder" joint="Shoulder"/>
+    <position class="Shoulder_extension" name="Shoulder_extension" joint="Shoulder_extension"/>
+    <position class="Elbow" name="Elbow" joint="Elbow"/>
+    <position class="Rotate_Gripper" name="Rotate_Gripper" joint="Rotate_Gripper"/>
+    <position class="Open_gripper" name="Open_gripper" joint="Open_gripper"/>
+  </actuator>
+</mujoco>
