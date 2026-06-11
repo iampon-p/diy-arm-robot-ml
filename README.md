@@ -1,6 +1,29 @@
-# DIY Low-Cost Robot Arm — ML Control
+# 3D Print Arm Robot
 
-> Built from the [low_cost_robot](https://github.com/AlexanderKoch-Koch/low_cost_robot) open-source design by Alexander Koch. 3D-printed at UTCC, trained with Python RL (Jan 2025).
+DIY robotic arm built with UTCC's 3D printer — combining ML control, computer vision face tracking, and hardware setup guides. Three interconnected sub-projects in one place.
+
+## Sub-projects
+
+| Folder | What it is |
+|--------|-----------|
+| `Low-cost-armRobot/` (root) | Core robot: 3D-printed arm + Python RL training (PPO/MuJoCo) |
+| `facetrack/` | OpenCV face detection — feeds (x,y) coords to arm control loop |
+| `roarm-m2s-setup/` | RoArm-M2-S hardware setup guide: drivers, 3D files, ROS workspace |
+
+## How They Connect
+
+```
+webcam
+  └─> facetrack/ — detect face → (x,y) target coords
+        └─> root ML model — predict servo angles
+              └─> serial → servo controller → arm tracks face
+```
+
+`facetrack` is the vision layer, the root RL pipeline converts screen coords to servo commands, `roarm-m2s-setup` is the hardware upgrade path (more capable arm, same software stack).
+
+---
+
+> Original hardware design: [low_cost_robot](https://github.com/AlexanderKoch-Koch/low_cost_robot) by Alexander Koch. 3D-printed at UTCC, trained with Python RL (Jan 2025).
 
 ---
 

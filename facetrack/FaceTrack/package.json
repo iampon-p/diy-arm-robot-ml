@@ -1,0 +1,19 @@
+{
+  "name": "facetrack-web-app",
+  "version": "1.0.0",
+  "description": "Web-based face tracking application using MediaPipe and camera",
+  "main": "index.html",
+  "scripts": {
+    "start": "http-server . -p 8080 -c-1 --cors",
+    "dev": "live-server --port=8080 --host=localhost --no-browser",
+    "build": "echo 'No build process needed for static files'",
+    "test": "echo 'Running application test...' && npm run start"
+  },
+  "keywords": ["face-tracking", "mediapipe", "camera", "web"],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2"
+  }
+}

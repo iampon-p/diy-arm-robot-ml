@@ -1,0 +1,13 @@
+# Large binary folders
+ws/
+Robot arm footage/
+
+# Large video files (over 100MB GitHub limit)
+Arm_Robot_Test_Footage_2025-09-24.mov
+
+# Google Drive stubs
+*.gdoc
+*.gsheet
+
+# OS
+.DS_Store
